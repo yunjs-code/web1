@@ -1,0 +1,11 @@
+.feature {
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px;
+  }
+  
+  .feature img {
+    max-width: 100%;
+    height: auto;
+  }
+  
