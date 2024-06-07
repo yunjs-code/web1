@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Login from './components/Login';
-import AuthResult from './components/AuthResult';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Feature from './components/Feature';
@@ -18,16 +17,15 @@ function App() {
     <Router>
       <Header onLoginClick={handleLoginClick} />
       <Routes>
-        <Route path="/authResult" element={<AuthResult />} />
-        {isLoginVisible && <Route path="/login" element={<Login />} />}
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={
+          <>
+            <Hero />
+            <Feature />
+            <Footer />
+          </>
+        } />
       </Routes>
-      {!isLoginVisible && (
-        <>
-          <Hero />
-          <Feature />
-          <Footer />
-        </>
-      )}
     </Router>
   );
 }
