@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-function Login() {
+function Login({ onLogin }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [token, setToken] = useState(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
   let query = useQuery();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = query.get('token');
@@ -32,10 +38,48 @@ function Login() {
     window.location.href = authUrl;
   };
 
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    console.log('SignUp: ', { name, email, password, token });
+    const response = await fetch('http://localhost:8000/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, password, token }),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert('User data submitted successfully');
+    } else {
+      alert(`Error: ${result.detail}`);
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const response = await fetch('http://localhost:8000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({ email: loginEmail, password: loginPassword }),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      onLogin(result.name);
+      navigate('/');
+    } else {
+      alert(`Error: ${result.detail}`);
+    }
+  };
+
   return (
     <div className={`container ${isSignUp ? 'right-panel-active' : ''}`} id="container">
       <div className="form-container sign-up-container">
-        <form>
+        <form onSubmit={handleSignUp}>
           <h1>Create Account</h1>
           <div className="social-container">
             <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
@@ -44,16 +88,16 @@ function Login() {
             <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
           </div>
           <span>or use your email for registration</span>
-          <input type="text" placeholder="Name" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          {token && <input type="text" value={token} readOnly placeholder="Token" />} {/* 토큰 표시 */}
+          <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          {token && <input type="text" value={token} readOnly placeholder="Token" />}
           <button type="button" className="verify-button" onClick={handleAuth}>인증 받기</button>
-          <button>Sign Up</button>
+          <button type="submit">Sign Up</button>
         </form>
       </div>
       <div className="form-container sign-in-container">
-        <form>
+        <form onSubmit={handleLogin}>
           <h1>Sign In</h1>
           <div className="social-container">
             <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
@@ -62,11 +106,10 @@ function Login() {
             <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
           </div>
           <span>or use your email for login</span>
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          {token && <input type="text" value={token} readOnly placeholder="Token" />} {/* 토큰 표시 */}
+          <input type="email" placeholder="Email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
+          <input type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
           <a href="#">Forgot your password?</a>
-          <button>Sign In</button>
+          <button type="submit">Sign In</button>
         </form>
       </div>
       <div className="overlay-container">

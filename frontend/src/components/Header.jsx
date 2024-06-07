@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
-function Header({ onLoginClick }) {
+function Header({ loggedIn, userName, onLogoutClick }) {
   const navigate = useNavigate();
 
+  const handleLogoutClick = () => {
+    onLogoutClick();
+    navigate('/');
+  };
+
   const handleLoginClick = () => {
-    onLoginClick();
     navigate('/login');
   };
 
@@ -22,7 +26,14 @@ function Header({ onLoginClick }) {
         </ul>
       </nav>
       <div className="auth">
-        <button className="login" onClick={handleLoginClick}>로그인</button>
+        {loggedIn ? (
+          <div>
+            <span>{userName}</span>
+            <button className="logout" onClick={handleLogoutClick}>로그아웃</button>
+          </div>
+        ) : (
+          <button className="login" onClick={handleLoginClick}>로그인</button>
+        )}
       </div>
     </header>
   );

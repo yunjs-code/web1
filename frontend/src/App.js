@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/Login';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -7,17 +7,28 @@ import Feature from './components/Feature';
 import Footer from './components/Footer';
 
 function App() {
-  const [isLoginVisible, setIsLoginVisible] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
 
-  const handleLoginClick = () => {
-    setIsLoginVisible(true);
+  const handleLogin = (name) => {
+    setLoggedIn(true);
+    setUserName(name);
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    setUserName('');
   };
 
   return (
     <Router>
-      <Header onLoginClick={handleLoginClick} />
+      <Header 
+        loggedIn={loggedIn}
+        userName={userName}
+        onLogoutClick={handleLogout}
+      />
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/" element={
           <>
             <Hero />
