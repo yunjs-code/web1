@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
@@ -14,9 +14,13 @@ function Header({ loggedIn, userName, onLogoutClick }) {
     navigate('/login');
   };
 
+  const handleUserPageClick = () => {
+    navigate('/user');
+  };
+
   return (
     <header className="header">
-      <div className="logo"><a href="/">백인우</a></div>
+      <div className="logo"><a href="/">은행</a></div>
       <nav>
         <ul>
           <li><a href="#">가계부</a></li>
@@ -28,7 +32,7 @@ function Header({ loggedIn, userName, onLogoutClick }) {
       <div className="auth">
         {loggedIn ? (
           <div>
-            <span>{userName}</span>
+            <span onClick={handleUserPageClick} style={{ cursor: 'pointer' }}>{userName}</span>
             <button className="logout" onClick={handleLogoutClick}>로그아웃</button>
           </div>
         ) : (

@@ -8,7 +8,6 @@ function useQuery() {
 
 function Login({ onLogin }) {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [token, setToken] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,13 +15,6 @@ function Login({ onLogin }) {
   const [loginPassword, setLoginPassword] = useState('');
   let query = useQuery();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = query.get('token');
-    if (token) {
-      setToken(token);
-    }
-  }, [query]);
 
   const handleAuth = () => {
     const clientId = '5a78ffbe-2e0a-466f-8305-f6cfaa603fb9';
@@ -40,13 +32,13 @@ function Login({ onLogin }) {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    console.log('SignUp: ', { name, email, password, token });
+    console.log('SignUp: ', { name, email, password });
     const response = await fetch('http://localhost:8000/submit', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify({ name, email, password, token }),
+      body: new URLSearchParams({ name, email, password }),
     });
 
     const result = await response.json();
@@ -59,6 +51,7 @@ function Login({ onLogin }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log('Login: ', { email: loginEmail, password: loginPassword });
     const response = await fetch('http://localhost:8000/login', {
       method: 'POST',
       headers: {
@@ -68,9 +61,13 @@ function Login({ onLogin }) {
     });
 
     const result = await response.json();
+    console.log('Login response: ', result);
     if (response.ok) {
-      onLogin(result.name);
-      navigate('/');
+      alert('Login successful');
+      onLogin(result.name, result.access_token, result.user_seq_no);  // 토큰과 user_seq_no를 전달합니다.
+      console.log('User logged in: ', result.name);
+      // navigate를 상태가 설정된 후에 호출
+      navigate('/user');
     } else {
       alert(`Error: ${result.detail}`);
     }
@@ -91,7 +88,6 @@ function Login({ onLogin }) {
           <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
           <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
           <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          {token && <input type="text" value={token} readOnly placeholder="Token" />}
           <button type="button" className="verify-button" onClick={handleAuth}>인증 받기</button>
           <button type="submit">Sign Up</button>
         </form>

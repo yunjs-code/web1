@@ -1,3 +1,4 @@
+# notion.py
 from fastapi import APIRouter, HTTPException, Form
 from pydantic import BaseModel
 import requests
@@ -56,11 +57,7 @@ async def login_user(email: str = Form(...), password: str = Form(...)):
         }
     }
 
-    print("Login Query:", query)  # 디버깅을 위한 로그 추가
-
     response = requests.post(NOTION_SEARCH_URL, headers=headers, json=query)
-    print("Response Status Code:", response.status_code)  # 디버깅을 위한 로그 추가
-    print("Response Text:", response.text)  # 디버깅을 위한 로그 추가
 
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail=response.text)
@@ -71,7 +68,7 @@ async def login_user(email: str = Form(...), password: str = Form(...)):
     
     user_data = results[0]["properties"]
     name = user_data["Name"]["title"][0]["text"]["content"]
+    access_token = user_data["access_token"]["rich_text"][0]["text"]["content"]
+    user_seq_no = user_data["user_seq_no"]["rich_text"][0]["text"]["content"]
 
-    print("User Data:", user_data)  # 디버깅을 위한 로그 추가
-
-    return {"message": "Login successful", "name": name}
+    return {"message": "Login successful", "name": name, "access_token": access_token, "user_seq_no": user_seq_no}

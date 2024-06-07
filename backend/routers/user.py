@@ -1,30 +1,42 @@
+# user.py
 from fastapi import APIRouter, HTTPException, Form
 import requests
 
 router = APIRouter()
 
-USER_REGISTER_URL = 'https://testapi.openbanking.or.kr/v2.0/user/register'
+USER_INFO_URL = 'https://testapi.openbanking.or.kr/v2.0/user/me'
+ACCOUNT_INFO_URL = 'https://testapi.openbanking.or.kr/v2.0/account/list'
 
-@router.post("/register")
-def register(user_name: str = Form(...), user_ci: str = Form(...), user_email: str = Form(...), access_token: str = Form(...)):
+@router.get("/user-info")
+async def get_user_info(access_token: str, user_seq_no: str):
     headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': f'Bearer {access_token}'
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json'
     }
-    req_common = {
-        'tran_dtime': '20210105101920',
-        'req_client_name': user_name,
-        'req_client_bank_code': '097',
-        'req_client_account_num': '1234567890123456',
-        'req_client_num': 'H123456789',
-        'user_email': user_email,
-        'user_ci': user_ci
+    params = {
+        'user_seq_no': user_seq_no
     }
 
-    response = requests.post(USER_REGISTER_URL, json=req_common, headers=headers)
+    response = requests.get(USER_INFO_URL, headers=headers, params=params)
     if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="User registration failed")
-    
-    response_data = response.json()
-    print("User Registration Response:", response_data)
-    return response_data
+        raise HTTPException(status_code=response.status_code, detail=response.json())
+
+    return response.json()
+
+@router.get("/account-info")
+async def get_account_info(access_token: str, user_seq_no: str):
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json'
+    }
+    params = {
+        'user_seq_no': user_seq_no,
+        'include_cancel_yn': 'N',
+        'sort_order': 'D'
+    }
+
+    response = requests.get(ACCOUNT_INFO_URL, headers=headers, params=params)
+    if response.status_code != 200:
+        raise HTTPException(status_code=response.status_code, detail=response.json())
+
+    return response.json()
