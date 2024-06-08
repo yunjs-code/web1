@@ -13,8 +13,8 @@ class TokenResponse(BaseModel):
     scope: str
     user_seq_no: str
 
-NOTION_API_KEY = "secret_wDzQrOMuVR9WiI603zYXAqsKh55DexmYYvbeG9dQ1wF"
-DATABASE_ID = "85d0173f9b194552a59ceb544fb268db"
+NOTION_API_KEY = "secret_cZ69hazZ1gkcTX5X4c8h1jK5wi86rNmmWcidINtTlff"
+DATABASE_ID = "b7a881e3ac8e4ed68738b29c8bb016f1"
 NOTION_API_URL = "https://api.notion.com/v1/pages"
 
 def save_to_notion(name, email, password, access_token, refresh_token, user_seq_no):
