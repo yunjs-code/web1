@@ -77,18 +77,19 @@ function Login({ onLogin }) {
       },
       body: new URLSearchParams({ email: loginEmail, password: loginPassword }),
     });
-
+  
     const result = await response.json();
     console.log('Login response: ', result);
     if (response.ok) {
       alert('Login successful');
-      onLogin(result.name);
+      onLogin(result.name, result.access_token, result.user_seq_no);
       console.log('User logged in: ', result.name);
       navigate('/');
     } else {
       alert(`Error: ${result.detail}`);
     }
   };
+  
 
   return (
     <div className={`container ${isSignUp ? 'right-panel-active' : ''}`} id="container">

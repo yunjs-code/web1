@@ -31,8 +31,12 @@ function UserPage({ accessToken, userSeqNo }) {
       }
     };
 
-    fetchUserInfo();
-    fetchAccountInfo();
+    if (accessToken && userSeqNo) {
+      fetchUserInfo();
+      fetchAccountInfo();
+    } else {
+      console.error('Missing access token or user sequence number');
+    }
   }, [accessToken, userSeqNo]);
 
   if (!userInfo || !accountInfo) {

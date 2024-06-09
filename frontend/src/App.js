@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/Login';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -13,13 +13,13 @@ function App() {
   const [accessToken, setAccessToken] = useState('');
   const [userSeqNo, setUserSeqNo] = useState('');
 
-  // 로그인 상태를 로컬 스토리지에 저장
+  // 로컬 스토리지에서 로그인 상태를 불러옴
   useEffect(() => {
     const storedLoggedIn = localStorage.getItem('loggedIn');
     const storedUserName = localStorage.getItem('userName');
     const storedAccessToken = localStorage.getItem('accessToken');
     const storedUserSeqNo = localStorage.getItem('userSeqNo');
-    
+
     if (storedLoggedIn === 'true') {
       setLoggedIn(true);
       setUserName(storedUserName);
