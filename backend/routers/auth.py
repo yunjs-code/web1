@@ -43,7 +43,7 @@ def save_to_notion(name, email, password, access_token, refresh_token, user_seq_
 @router.get("/callback")
 def callback(code: str, state: str):
     client_id = '5a78ffbe-2e0a-466f-8305-f6cfaa603fb9'
-    client_secret = 'ef83f907-c7ee-4fd3-8a05-3d1dc370b5a2'  # 클라이언트 시크릿을 여기에 입력하세요
+    client_secret = 'ef83f907-c7ee-4fd3-8a05-3d1dc370b5a2'
     redirect_uri = 'http://localhost:8000/callback'
     
     token_url = "https://testapi.openbanking.or.kr/oauth/2.0/token"
@@ -70,11 +70,18 @@ def callback(code: str, state: str):
     refresh_token = response_data['refresh_token']
     user_seq_no = response_data['user_seq_no']
     
-    # 이메일, 이름, 패스워드 등은 프론트엔드에서 받아서 전달해야 함
-    # 예시: http://localhost:3000/login?token={access_token}&refresh_token={refresh_token}&user_seq_no={user_seq_no}
     return RedirectResponse(url=f"http://localhost:3000/login?token={access_token}&refresh_token={refresh_token}&user_seq_no={user_seq_no}")
 
 @router.post("/submit")
 async def submit_user_data(name: str = Form(...), email: str = Form(...), password: str = Form(...), token: str = Form(None), refresh_token: str = Form(None), user_seq_no: str = Form(None)):
     save_to_notion(name, email, password, token, refresh_token, user_seq_no)
     return {"message": "User data submitted successfully"}
+
+@router.post("/refresh")
+async def refresh_token(refresh_token: str = Form(...)):
+    print(f"Received refresh token: {refresh_token}")  # 디버깅 메시지
+    if refresh_token != "expected_refresh_token":  # 예시
+        raise HTTPException(status_code=422, detail="Invalid refresh token")
+    
+    # 여기서 새로운 access_token을 생성합니다.
+    return {"access_token": "new_access_token"}

@@ -1,0 +1,89 @@
+/* Stock.css */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+
+.page {
+    scroll-snap-align: start;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: black;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.box1 {
+    background-color: white;
+}
+
+.box2 {
+    background-color: white;
+    color: black;
+}
+
+.box3 {
+    background-color: white;
+    color: black;
+}
+
+.table-container {
+    width: 100%;
+    max-width: 1200px; /* 최대 너비를 설정하여 테이블의 크기를 제한합니다. */
+    margin: 0 auto; /* 테이블을 중앙으로 정렬합니다. */
+    overflow: auto;
+}
+
+.ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ranking-table th, .ranking-table td {
+    padding: 8px;
+    text-align: right;
+    border: 1px solid #ddd;
+}
+
+.ranking-table th {
+    background-color: #f2f2f2;
+    text-align: center;
+    position: sticky; /* 추가 */
+    top: 0; /* 추가 */
+    z-index: 1; /* 추가 */
+}
+
+.ranking-table .up {
+    color: red;
+}
+
+.ranking-table .down {
+    color: blue;
+}

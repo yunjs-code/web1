@@ -26,6 +26,7 @@ body {
   max-width: 100%;
   min-height: 480px;
   display: flex; /* Use flexbox for horizontal layout */
+  margin-top: 100px;
 }
 
 .form-container {

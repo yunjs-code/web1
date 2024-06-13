@@ -1,19 +1,64 @@
-.App {
-  font-family: 'Montserrat', sans-serif;
-  text-align: center;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-body, html {
+body {
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  display: flex;
+  justify-content: center; /* body 중앙 정렬 */
+  align-items: center; /* body 중앙 정렬 */
   height: 100%;
   width: 100%;
+  background-color: #f0f0f0;
 }
 
-.hidden {
-  display: none;
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  width: 100vw; /* 가로를 90%로 설정 */
+  max-width: 1400px; /* 최대 가로 길이를 1400px로 설정 */
+  height: 100vh; /* 세로를 100vh로 설정 */
+  margin-top: -50px;
+}
+
+.grid-item {
+  border: 2px solid red;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 10px; /* 모서리를 둥글게 설정 */
+}
+
+.news {
+  background-color: red;
+  grid-column: 1 / span 3;
+  grid-row: 2 / span 4;
+}
+
+.personal-finance {
+  background-color: purple;
+  grid-column: 5 / span 4;
+  grid-row: 3 / span 1;
+}
+
+.stock {
+  background-color: yellow;
+  grid-column: 10 / span 3;
+  grid-row: 2 / span 4;
+}
+
+.glossary {
+  background-color: orange;
+  grid-column: 1 / span 3;
+  grid-row: 6 / span 3;
+}
+
+.account-info {
+  background-color: teal;
+  grid-column: 4 / span 6;
+  grid-row: 6 / span 3;
+}
+
+.exchange-rate {
+  background-color: limegreen;
+  grid-column: 10 / span 3;
+  grid-row: 6 / span 3;
 }

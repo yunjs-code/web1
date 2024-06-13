@@ -73,27 +73,5 @@ async def login_user(email: str = Form(...), password: str = Form(...)):
     return {"message": "Login successful", "name": name, "access_token": access_token, "user_seq_no": user_seq_no}
 
 @router.post("/refresh")
-async def refresh_access_token(refresh_token: str = Form(...)):
-    token_url = "https://testapi.openbanking.or.kr/oauth/2.0/token"
-    
-    payload = {
-        'refresh_token': refresh_token,
-        'grant_type': 'refresh_token',
-        'client_id': '5a78ffbe-2e0a-466f-8305-f6cfaa603fb9',
-        'client_secret': 'ef83f907-c7ee-4fd3-8a05-3d1dc370b5a2'
-    }
-    
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    
-    response = requests.post(token_url, data=payload, headers=headers)
-    response_data = response.json()
-    
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail=response_data)
-    
-    return {
-        "access_token": response_data['access_token'],
-        "expires_in": response_data['expires_in']
-    }
+async def refresh_token(refresh_token: str = Form(...)):
+    raise HTTPException(status_code=501, detail="Refresh token is not supported")

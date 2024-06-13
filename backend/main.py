@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import auth, user, notion
+from routers import auth, user, notion, profit, fluctuation, volume
 
 app = FastAPI()
 
@@ -21,6 +21,9 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(notion.router)
+app.include_router(profit.router)
+app.include_router(fluctuation.router)
+app.include_router(volume.router)  # volume 라우터 추가
 
 # FastAPI 애플리케이션을 실행합니다.
 if __name__ == "__main__":
