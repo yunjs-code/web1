@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import './FAB.css';
+import { useNavigate } from 'react-router-dom';
+import { FaPlus, FaTimes } from 'react-icons/fa';
 
 const FAB = ({ onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleFAB = () => {
     setIsOpen(!isOpen);
@@ -10,25 +13,19 @@ const FAB = ({ onLogout }) => {
 
   return (
     <div className="fab-container">
-      <button className="fab main-fab" onClick={toggleFAB}>
-        <i className="fas fa-plus"></i>
-      </button>
       {isOpen && (
-        <div className="fab-options">
-          <button className="fab-option">
-            <i className="fas fa-envelope"></i>
+        <div className="fab-buttons">
+          <button className="fab" onClick={() => navigate('/main')}>
+            Main
           </button>
-          <button className="fab-option">
-            <i className="fas fa-facebook"></i>
-          </button>
-          <button className="fab-option">
-            <i className="fas fa-comments"></i>
-          </button>
-          <button className="fab-option" onClick={onLogout}>
-            <i className="fas fa-sign-out-alt"></i>
+          <button className="fab" onClick={onLogout}>
+            Logout
           </button>
         </div>
       )}
+      <button className="fab-toggle" onClick={toggleFAB}>
+        {isOpen ? <FaTimes /> : <FaPlus />}
+      </button>
     </div>
   );
 };

@@ -2,69 +2,45 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 1000; /* 다른 요소들 위에 나타나도록 z-index 설정 */
-  }
-  
-  .fab {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background-color: #ff5722;
-    color: white;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    margin: 10px 0;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .fab:hover {
-    transform: scale(1.1);
-  }
-  
-  .fab-options {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.fab-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin-bottom: 10px;
-  }
-  
-  .fab-option {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: #3b5998;
+}
+
+.fab-toggle {
+    width: 56px;
+    height: 56px;
+    background-color: #f44336;
     color: white;
     border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
     cursor: pointer;
-    margin: 5px 0;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .fab-option:hover {
-    transform: scale(1.1);
-  }
-  
-  .fab-option:nth-child(1) {
-    background-color: #ff5722;
-  }
-  
-  .fab-option:nth-child(2) {
-    background-color: #3b5998;
-  }
-  
-  .fab-option:nth-child(3) {
-    background-color: #ffeb3b;
-  }
-  
-  .fab-option:nth-child(4) {
-    background-color: #757575;
-  }
-  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+.fab {
+    width: 56px;
+    height: 56px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}

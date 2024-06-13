@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './Stock.css';
+import FAB from './FAB';
+import { useNavigate } from 'react-router-dom';
 
 function Stock() {
   const [profitData, setProfitData] = useState([]);
   const [fluctuationData, setFluctuationData] = useState([]);
   const [volumeData, setVolumeData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:8000/profit-ranking')
@@ -26,6 +29,16 @@ function Stock() {
       .then(data => Array.isArray(data) ? setVolumeData(data) : setVolumeData([]))
       .catch(error => console.error('Error fetching volume data:', error));
   }, []);
+
+  const handleLogout = () => {
+    // 로그아웃 처리 로직
+    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('userSeqNo');
+    localStorage.removeItem('email');
+    navigate('/');
+  };
 
   return (
     <div className="page-container">
@@ -163,6 +176,7 @@ function Stock() {
           </div>
         </div>
       </div>
+      <FAB onLogout={handleLogout} />
     </div>
   );
 }

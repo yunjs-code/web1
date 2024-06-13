@@ -14,6 +14,7 @@ html, body {
     height: 100vh;
     width: 100vw;
     overflow-y: scroll;
+    overflow-x: hidden; /* 가로 스크롤 제거 */
     scroll-snap-type: y mandatory;
 }
 
