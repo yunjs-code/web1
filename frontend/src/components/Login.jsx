@@ -90,7 +90,6 @@ function Login({ onLogin }) {
     }
   };
   
-
   return (
     <div className={`container ${isSignUp ? 'right-panel-active' : ''}`} id="container">
       <div className="form-container sign-up-container">
