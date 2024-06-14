@@ -1,0 +1,54 @@
+.news-container {
+    width: 1920px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .news {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start; /* 상단에 위치시키기 위해 추가 */
+    flex-wrap: wrap;
+    background-color: #f9f9f9;
+  }
+  
+  .news-section {
+    flex: 1;
+    min-width: 300px;
+    margin: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 10px; /* 마진 탑을 10px로 설정 */
+  }
+  
+  .news-section h3 {
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+  }
+  
+  .news-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .news-section ul li {
+    margin-bottom: 10px;
+  }
+  
+  .news-section ul li a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .news-section ul li a:hover {
+    text-decoration: underline;
+    color: #007bff;
+  }
+  

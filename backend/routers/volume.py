@@ -72,8 +72,6 @@ def read_volume_ranking():
         volume_ranking = get_volume_ranking(access_token)
         return volume_ranking
     except HTTPException as e:
-        print(f"HTTP Exception: {e.detail}")
         raise e
     except Exception as e:
-        print(f"Exception: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))

@@ -6,6 +6,7 @@ import Glossary from './components/Glossary';
 import AccountInfo from './components/AccountInfo';
 import UserPage from './components/UserPage';
 import FAB from './components/FAB';
+import Stock from './components/Stock'; // Stock 컴포넌트를 import합니다
 import Chart from 'chart.js/auto';
 import './App.css';
 
@@ -41,7 +42,7 @@ function App() {
       fetch('http://localhost:8000/profit-ranking')
         .then(response => response.json())
         .then(data => {
-          console.log('Profit Data:', data); // 데이터 로깅
+          // console.log('Profit Data:', data); // 데이터 로깅
           setProfitData(Array.isArray(data) ? data.slice(0, 5) : [])
         })
         .catch(error => console.error('Error fetching profit data:', error));
@@ -49,7 +50,7 @@ function App() {
       fetch('http://localhost:8000/fluctuation-ranking')
         .then(response => response.json())
         .then(data => {
-          console.log('Fluctuation Data:', data); // 데이터 로깅
+          // console.log('Fluctuation Data:', data); // 데이터 로깅
           setFluctuationData(Array.isArray(data) ? data.slice(0, 5) : [])
         })
         .catch(error => console.error('Error fetching fluctuation data:', error));
@@ -57,26 +58,10 @@ function App() {
       fetch('http://localhost:8000/volume-ranking')
         .then(response => response.json())
         .then(data => {
-          console.log('Volume Data:', data); // 데이터 로깅
+          // console.log('Volume Data:', data); // 데이터 로깅
           setVolumeData(Array.isArray(data) ? data.slice(0, 5) : [])
         })
         .catch(error => console.error('Error fetching volume data:', error));
-
-      fetch('http://localhost:8000/kospi')
-        .then(response => response.json())
-        .then(data => {
-          console.log('Kospi Data:', data); // 데이터 로깅
-          setKospiData(Array.isArray(data) ? data : [])
-        })
-        .catch(error => console.error('Error fetching kospi data:', error));
-
-      fetch('http://localhost:8000/kosdaq')
-        .then(response => response.json())
-        .then(data => {
-          console.log('Kosdaq Data:', data); // 데이터 로깅
-          setKosdaqData(Array.isArray(data) ? data : [])
-        })
-        .catch(error => console.error('Error fetching kosdaq data:', error));
     };
 
     fetchData();
@@ -136,23 +121,22 @@ function App() {
             path="/main" 
             element={loggedIn ? (
               <div className="container">
-                <div className="header">제목</div>
+                <div className="header">개추</div>
                 <Link to="/news" className="grid-item news">news</Link>
                 <div className="grid-item stock">
                   <div className="slide-container" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-                    <StockSlide title="Stock - Box 1" data={profitData} />
-                    <StockSlide title="Stock - Box 2" data={fluctuationData} />
-                    <StockSlide title="Stock - Box 3" data={volumeData} />
-                    <StockSlide title="Kospi Data" data={kospiData} />
-                    <StockSlide title="Kosdaq Data" data={kosdaqData} />
+                    <StockSlide title="수익자산지표" data={profitData} />
+                    <StockSlide title="등락률 순위" data={fluctuationData} />
+                    <StockSlide title="거래량 순위" data={volumeData} />
+                    
                   </div>
                   <div className="slide-buttons">
                     <button className="slide-button" onClick={prevSlide}>◀</button>
                     <button className="slide-button" onClick={nextSlide}>▶</button>
                   </div>
                 </div>
-                <Link to="/account-info" className="grid-item account-info">account-info</Link>
-                <Link to="/glossary" className="grid-item glossary">glossary</Link>
+                <Link to="/account-info" className="grid-item account-info">사용자 정보</Link>
+                <Link to="https://fine.fss.or.kr/fine/bbs/B0000340/list.do?menuNo=900014" className="grid-item glossary">경제 용어</Link>
               </div>
             ) : (
               <Navigate to="/" />
@@ -163,6 +147,7 @@ function App() {
             element={loggedIn ? <UserPage accessToken={accessToken} userSeqNo={userSeqNo} /> : <Navigate to="/" />} 
           />
           <Route path="/news" element={<News />} />
+          <Route path="/stock" element={<Stock />} /> {/* Stock 경로 추가 */}
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/account-info" element={<AccountInfo accessToken={accessToken} userSeqNo={userSeqNo} />} />
         </Routes>
