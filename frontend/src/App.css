@@ -62,13 +62,15 @@ body {
 .slide-container {
   display: flex;
   height: 100%;
+  width: 100%;
   transition: transform 0.5s ease;
 }
 
 .slide {
-  min-width: 100%;
+  width: 100%;
   box-sizing: border-box;
   padding: 20px;
+  flex-shrink: 0;
 }
 
 .table-container {
@@ -123,4 +125,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.chart-container {
+  width: 100%;
+  height: 300px;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
 }

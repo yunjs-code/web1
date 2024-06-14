@@ -8,36 +8,33 @@ router = APIRouter()
 APP_KEY = 'PSgpJgGFjxMJwy4T9pSl7EAknSFYq3gCYNUF'
 APP_SECRET = 'AuhozI7auOaa2slt0o3PkTJenly96jNnasBMTurmXuea75z0nOa7UgwcAzbYDpB9W7vTeHOqYl4Z7mpSMLSeJPOtXYCVVZdcW1U9diueAlNepH7KhcFuRXKvUEeiDkhNda9w+rVjZ44u0RPA1j18ebToZOspmhowmHSzuF5mYRqMjiAkIRI='
 
-# 글로벌 변수로 토큰 저장
+# Token caching variables
 access_token = None
 token_expiry = 0
 
-def get_access_token(app_key, app_secret):
+def get_access_token():
     global access_token, token_expiry
     current_time = time.time()
-    
     if access_token and current_time < token_expiry:
         return access_token
-    
+
     url = "https://openapi.koreainvestment.com:9443/oauth2/tokenP"
     headers = {
         "content-type": "application/json"
     }
     payload = {
         "grant_type": "client_credentials",
-        "appkey": app_key,
-        "appsecret": app_secret
+        "appkey": APP_KEY,
+        "appsecret": APP_SECRET
     }
     response = requests.post(url, headers=headers, data=json.dumps(payload))
-    print("토큰 요청 응답 상태 코드:", response.status_code)
-    print("토큰 요청 응답 본문:", response.text)
     response_data = response.json()
     if response.status_code == 200 and "access_token" in response_data:
         access_token = response_data["access_token"]
-        token_expiry = current_time + response_data.get("expires_in", 3600) - 60  # 토큰 만료 1분 전에 갱신
+        token_expiry = current_time + response_data.get("expires_in", 3600) - 60
         return access_token
     else:
-        raise HTTPException(status_code=500, detail=f"토큰 요청 실패: {response.text}")
+        raise HTTPException(status_code=500, detail=f"Failed to get access token: {response.text}")
 
 def get_profit_asset_index_ranking(access_token):
     url = "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/ranking/profit-asset-index"
@@ -64,23 +61,21 @@ def get_profit_asset_index_ranking(access_token):
         "fid_trgt_exls_cls_code": "0"
     }
     response = requests.get(url, headers=headers, params=params)
-    print("API 응답 상태 코드:", response.status_code)
-    print("API 응답 본문:", response.text)
     response_data = response.json()
     if response.status_code == 200 and "output" in response_data:
         return response_data["output"]
     else:
-        raise HTTPException(status_code=500, detail=f"예상치 못한 응답 형식: {response.text}")
+        raise HTTPException(status_code=500, detail=f"Unexpected response format: {response.text}")
 
 @router.get("/profit-ranking")
 def read_profit_ranking():
     try:
-        access_token = get_access_token(APP_KEY, APP_SECRET)
+        access_token = get_access_token()
         profit_ranking = get_profit_asset_index_ranking(access_token)
         return profit_ranking
     except HTTPException as e:
-        print(f"HTTP 예외 발생: {e.detail}")
+        print(f"HTTP Exception: {e.detail}")
         raise e
     except Exception as e:
-        print(f"일반 예외 발생: {str(e)}")
+        print(f"Exception: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
