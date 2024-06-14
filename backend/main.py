@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import auth, user, notion, profit, fluctuation, volume, stock_data, news_crawler  # news_crawler 추가
+from routers import auth, user, notion, profit, fluctuation, volume, stock_data, news_crawler, exchange_rate  # 추가된 부분
 
 app = FastAPI()
 
@@ -25,7 +25,8 @@ app.include_router(profit.router)
 app.include_router(fluctuation.router)
 app.include_router(volume.router)
 app.include_router(stock_data.router)
-app.include_router(news_crawler.router)  # news_crawler 라우터 추가
+app.include_router(news_crawler.router)
+app.include_router(exchange_rate.router)  # 추가된 부분
 
 # FastAPI 애플리케이션을 실행합니다.
 if __name__ == "__main__":

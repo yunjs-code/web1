@@ -6,7 +6,7 @@ import Glossary from './components/Glossary';
 import AccountInfo from './components/AccountInfo';
 import UserPage from './components/UserPage';
 import FAB from './components/FAB';
-import Stock from './components/Stock'; // Stock 컴포넌트를 import합니다
+import Stock from './components/Stock';
 import Chart from 'chart.js/auto';
 import './App.css';
 
@@ -21,6 +21,7 @@ function App() {
   const [volumeData, setVolumeData] = useState([]);
   const [kospiData, setKospiData] = useState([]);
   const [kosdaqData, setKosdaqData] = useState([]);
+  const [exchangeRateData, setExchangeRateData] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -42,32 +43,40 @@ function App() {
       fetch('http://localhost:8000/profit-ranking')
         .then(response => response.json())
         .then(data => {
-          // console.log('Profit Data:', data); // 데이터 로깅
-          setProfitData(Array.isArray(data) ? data.slice(0, 5) : [])
+          setProfitData(Array.isArray(data) ? data.slice(0, 4) : []);
+          console.log('Profit Data:', data); // 데이터 로깅
         })
         .catch(error => console.error('Error fetching profit data:', error));
 
       fetch('http://localhost:8000/fluctuation-ranking')
         .then(response => response.json())
         .then(data => {
-          // console.log('Fluctuation Data:', data); // 데이터 로깅
-          setFluctuationData(Array.isArray(data) ? data.slice(0, 5) : [])
+          setFluctuationData(Array.isArray(data) ? data.slice(0, 4) : []);
+          console.log('Fluctuation Data:', data); // 데이터 로깅
         })
         .catch(error => console.error('Error fetching fluctuation data:', error));
 
       fetch('http://localhost:8000/volume-ranking')
         .then(response => response.json())
         .then(data => {
-          // console.log('Volume Data:', data); // 데이터 로깅
-          setVolumeData(Array.isArray(data) ? data.slice(0, 5) : [])
+          setVolumeData(Array.isArray(data) ? data.slice(0, 5) : []);
+          console.log('Volume Data:', data); // 데이터 로깅
         })
         .catch(error => console.error('Error fetching volume data:', error));
+
+      fetch('http://localhost:8000/exchange-rate')
+        .then(response => response.json())
+        .then(data => {
+          setExchangeRateData(data.exchange_rates);
+          console.log('Exchange Rate Data:', data.exchange_rates); // 데이터 로깅
+        })
+        .catch(error => console.error('Error fetching exchange rate data:', error));
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 60000); // 1분마다 데이터 가져오기
+    const interval = setInterval(fetchData, 60000);
 
-    return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 클리어
+    return () => clearInterval(interval);
   }, []);
 
   const handleLogin = (name, token, seqNo, userEmail) => {
@@ -101,11 +110,11 @@ function App() {
   };
 
   const nextSlide = () => {
-    setCurrentSlide((currentSlide + 1) % 5); // 5 슬라이드로 업데이트
+    setCurrentSlide((currentSlide + 1) % 4);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((currentSlide - 1 + 5) % 5); // 5 슬라이드로 업데이트
+    setCurrentSlide((currentSlide - 1 + 4) % 4);
   };
 
   return (
@@ -128,7 +137,7 @@ function App() {
                     <StockSlide title="수익자산지표" data={profitData} />
                     <StockSlide title="등락률 순위" data={fluctuationData} />
                     <StockSlide title="거래량 순위" data={volumeData} />
-                    
+                    <ExchangeRateSlide title="환율 정보" data={exchangeRateData} />
                   </div>
                   <div className="slide-buttons">
                     <button className="slide-button" onClick={prevSlide}>◀</button>
@@ -147,7 +156,7 @@ function App() {
             element={loggedIn ? <UserPage accessToken={accessToken} userSeqNo={userSeqNo} /> : <Navigate to="/" />} 
           />
           <Route path="/news" element={<News />} />
-          <Route path="/stock" element={<Stock />} /> {/* Stock 경로 추가 */}
+          <Route path="/stock" element={<Stock />} />
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/account-info" element={<AccountInfo accessToken={accessToken} userSeqNo={userSeqNo} />} />
         </Routes>
@@ -173,7 +182,6 @@ function StockSlide({ title, data }) {
   const renderChart = (title, data) => {
     const ctx = document.getElementById(`${title}-chart`).getContext('2d');
 
-    // 기존 차트 인스턴스가 존재하면 파괴
     if (chartRef.current) {
       chartRef.current.destroy();
     }
@@ -242,6 +250,41 @@ function StockSlide({ title, data }) {
             </table>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function ExchangeRateSlide({ title, data }) {
+  return (
+    <div className="slide">
+      <h2>{title}</h2>
+      <div className="table-container">
+        <table className="ranking-table">
+          <thead>
+            <tr>
+              <th>통화</th>
+              <th>1000원당 환율</th>
+              <th>전일 대비</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.length > 0 ? data.map((item, index) => (
+              <tr key={index}>
+                <td>{item.currency}</td>
+                <td>{item.rate}</td>
+                <td className={item.change_sign.includes('상승') ? 'up' : 'down'}>
+                  {item.change_sign.includes('상승') ? '▲' : '▼'}
+                  {item.change}
+                </td>
+              </tr>
+            )) : (
+              <tr>
+                <td colSpan="3">데이터 없음</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

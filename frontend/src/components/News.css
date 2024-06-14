@@ -1,9 +1,11 @@
 .news-container {
-    width: 1920px;
+    width: 1820px;
     margin: 0 auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
+    margin-right: 2rem;
+    margin-left: 2rem;
   }
   
   .news {
@@ -23,6 +25,8 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin-top: 10px; /* 마진 탑을 10px로 설정 */
+    margin-right: 2rem;
+    margin-left: 2rem;
   }
   
   .news-section h3 {
